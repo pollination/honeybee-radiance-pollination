@@ -1,8 +1,54 @@
-from queenbee_dsl.function import function, command, Inputs, Outputs
+from dataclasses import dataclass
+from queenbee_dsl.function import Function, command, Inputs, Outputs
 
 
-@function
-class CreateOctreeWithSky:
+@dataclass
+class AddRemoveMatrix(Function):
+    """Remove direct sky from total sky and add direct sun."""
+
+    total_sky_matrix = Inputs.file(
+        description='Path to matrix for total sky contribution.',
+        path='sky.ill', extensions=['ill', 'dc']
+    )
+
+    direct_sky_matrix = Inputs.file(
+        description='Path to matrix for direct sky contribution.',
+        path='sky_dir.ill', extensions=['ill', 'dc']
+    )
+
+    sunlight_matrix = Inputs.file(
+        description='Path to matrix for direct sunlight contribution.',
+        path='sun.ill', extensions=['ill', 'dc']
+    )
+
+    @command
+    def create_matrix(self):
+        return 'rmtxop sky.ill + -s -1.0 sky_dir.ill + sun.ill > final.ill'
+
+    results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
+
+
+@dataclass
+class AddRemoveMatrixWithConversion(AddRemoveMatrix):
+    """Remove direct sky from total sky and add direct sun."""
+    conversion = Inputs.str(
+        description='conversion as a string which will be passed to -c',
+        default='47.4 119.9 11.6'
+    )
+
+    output_format = Inputs.str(
+        default='-fa',
+        spec={'type': 'string', 'enum': ['-fa', '-fd']}
+    )
+
+    @command
+    def create_matrix(self):
+        return 'rmtxop {{self.output_format}} sky.ill + -s -1.0 sky_dir.ill + sun.ill ' \
+            '-c {{self.conversion}} | getinfo - > final.ill'
+
+
+@dataclass
+class CreateOctreeWithSky(Function):
     """Generate an octree from a Radiance folder and sky!"""
 
     # inputs
@@ -34,8 +80,8 @@ class CreateOctreeWithSky:
     scene_file = Outputs.file(description='Output octree file.', path='scene.oct')
 
 
-@function
-class GenSky:
+@dataclass
+class GenSky(Function):
     """Generates a 100000 lux sky."""
 
     @command
@@ -45,8 +91,8 @@ class GenSky:
     sky = Outputs.file(description='Generated sky file.', path='100000_lux.sky')
 
 
-@function
-class CreateRadianceFolder:
+@dataclass
+class CreateRadianceFolder(Function):
     """Create a Radiance folder from a HBJSON input file."""
 
     input_model = Inputs.file(
