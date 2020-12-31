@@ -101,8 +101,8 @@ class GenSkyWithCertailIllum(Function):
     )
 
     @command
-    def gen_100000_sky(self):
-        return 'honeybee-radiance sky illuminance {{self.illuminance}}'
+    def gen_overcast_sky(self):
+        return 'honeybee-radiance sky illuminance {{self.illuminance}} --name overcast.sky'
 
     sky = Outputs.file(description='Generated sky file.', path='overcast.sky')
 
@@ -170,6 +170,11 @@ class CreateSkyMatrix(Function):
 class MergeFiles(Function):
     """Merge several files with similar starting name into one."""
 
+    name = Inputs.str(
+        description='Base name for files to be merged.',
+        default='grid'
+    )
+
     extension = Inputs.str(
         description='File extension including the . before the extension (e.g. .res, '
         '.ill)'
@@ -182,10 +187,10 @@ class MergeFiles(Function):
 
     @command
     def merge_files(self):
-        return 'honeybee-radiance grid merge input_folder grid {{self.extension}}'
+        return 'honeybee-radiance grid merge input_folder grid {{self.extension}} --name {{self.name}}'
 
     result_file = Outputs.file(
-        description='Output result file.', path='grid{{self.extension}}'
+        description='Output result file.', path='{{self.name}}{{self.extension}}'
     )
 
 
@@ -197,7 +202,7 @@ class RayTracingDaylightFactor(Function):
         default='-ab 2'
     )
 
-    sky_illum = Inputs.float(
+    sky_illum = Inputs.int(
         description='Sky illuminance level for the sky included in octree.',
         default=100000
     )
