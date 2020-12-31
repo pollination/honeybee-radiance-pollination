@@ -14,7 +14,7 @@ Install the package using `pip install .`. Then you can use `queenbee_dsl` to lo
 package as a Queenbee Plugin.
 
 ```python
-from queenbee_dsl.plugin import load
+from queenbee_dsl.package import load
 
 plugin = load(python_package)
 print(plugin.yaml())
