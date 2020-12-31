@@ -231,7 +231,7 @@ class SplitGrid(Function):
     """Split a single sensor grid file into multiple smaller grids."""
 
     sensor_count = Inputs.int(
-        description='Number of maximum senseors in each generated grid.',
+        description='Number of maximum sensors in each generated grid.',
         spec={'type': 'integer', 'minimum': 1}
     )
 
