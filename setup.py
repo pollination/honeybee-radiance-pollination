@@ -3,7 +3,7 @@ import setuptools
 # add these line to integrate the queenbee packaging process
 # into Python packaging
 from queenbee_dsl.package import PackageQBInstall, PackageQBDevelop
-name = 'honeybee-radiance-pollination'
+name = 'pollination-honeybee-radiance'
 PackageQBInstall.__queenbee_name__ = name
 PackageQBDevelop.__queenbee_name__ = name
 
@@ -17,7 +17,7 @@ setuptools.setup(
     author='mostapha',
     author_email='mostapha@ladybug.tools',
     setup_requires=['setuptools_scm'],
-    packages=setuptools.find_packages('honeybee_radiance_pollination'),
+    packages=setuptools.find_packages('pollination_honeybee_radiance'),
     keywords=['honeybee', 'radiance', 'ladybug-tools', 'daylight'],
     license='PolyForm Shield License 1.0.0'
 )
