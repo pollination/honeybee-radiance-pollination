@@ -1,5 +1,4 @@
 """Honeybee Radiance plugin for Pollination."""
-from .functions import *  # to make it easier to access the functions - not required
 
 __queenbee__ = {
     'name': 'honeybee-radiance',
