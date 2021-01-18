@@ -44,6 +44,7 @@ class DaylightCoefficient(Function):
     def run_daylight_coeff(self):
         return 'honeybee-radiance dc scoeff scene.oct grid.pts sky.dome sky.mtx ' \
             '--sensor-count {{self.sensor_count}} --output results.ill --rad-params ' \
-            '{{self.radiance_parameters}} --rad-params-locked {{self.fixed_radiance_parameters}}'
+            '"{{self.radiance_parameters}}" --rad-params-locked '\
+            '"{{self.fixed_radiance_parameters}}"'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')

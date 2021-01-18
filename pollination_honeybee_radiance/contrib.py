@@ -33,7 +33,7 @@ class DaylightContribution(Function):
 
     modifiers = Inputs.file(
         description='Path to modifiers file. In most cases modifiers are sun modifiers.',
-        path='sun.mod'
+        path='suns.mod'
     )
 
     sensor_grid = Inputs.file(
@@ -50,7 +50,7 @@ class DaylightContribution(Function):
     def run_daylight_coeff(self):
         return 'honeybee-radiance dc scontrib scene.oct grid.pts suns.mod ' \
             '--{{self.calculate_values}} --sensor-count {{self.sensor_count}} ' \
-            '--rad-params {{self.radiance_parameters}} --rad-params-locked ' \
-            '{{self.fixed_radiance_parameters}} --output results.ill'
+            '--rad-params "{{self.radiance_parameters}}" --rad-params-locked ' \
+            '"{{self.fixed_radiance_parameters}}" --output results.ill'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')
