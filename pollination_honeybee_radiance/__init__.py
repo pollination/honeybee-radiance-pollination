@@ -9,7 +9,7 @@ __queenbee__ = {
         'https://github.com/ladybug-tools/honeybee-radiance',
         'https://hub.docker.com/r/ladybugtools/honeybee-radiance'
     ],
-    'tag': '0.3.9',  # tag for honeybee-radiance plugin
+    'tag': '0.4.0',  # tag for honeybee-radiance plugin
     'app_version': '5.4',  # tag for version of Radiance
     'keywords': ['honeybee', 'radiance', 'ladybug-tools', 'daylight'],
     'maintainers': [
@@ -21,7 +21,7 @@ __queenbee__ = {
     },
     'config': {
         'docker': {
-            'image': 'ladybugtools/honeybee-radiance:1.27.21',
+            'image': 'ladybugtools/honeybee-radiance:1.28.12',
             'workdir': '/home/ladybugbot/run'
         }
     }
