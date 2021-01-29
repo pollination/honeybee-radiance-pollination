@@ -2,20 +2,23 @@
 
 The honeybee-radiance plugin adds daylight simulation functions to Pollination.
 
-## Dependencies:
+This plugin takes advantage of Ladybug Tools `honeybee-radiance` Python package CLI.
+For more information see: [PyPI](https://pypi.org/project/honeybee-radiance/) and [GitHub](https://github.com/ladybug-tools/honeybee-radiance).
 
-- `honeybee-radiance` Python package. [PyPI](https://pypi.org/project/honeybee-radiance/), [source](https://github.com/ladybug-tools/honeybee-radiance)
-- `Radiance` ([website](https://www.radiance-online.org/)) libraries.
+For running all the functionalities on your local machine you need to install
+[Radiance](https://www.radiance-online.org/)). You can download the latest official
+release of Radiance from
+[GitHub](https://github.com/LBNL-ETA/Radiance/releases/tag/012cb178).
 
+# Functions
 
-## Load as Queenbee plugin
+You can see the list of available functions in honeybee-radiance plugin
+[here](https://app.pollination.cloud/plugins/ladybug-tools/honeybee-radiance/0.4.0).
 
-Install the package using `pip install .`. Then you can use `queenbee_dsl` to load the
-package as a Queenbee Plugin.
+# Example
 
-```python
-from queenbee_dsl.package import load
+For a real-world example see Ladybug Tools recipes:
 
-plugin = load(python_package)
-print(plugin.yaml())
-```
+- [Annual daylight recipe](https://github.com/pollination/ladybug-tools-recipes/tree/master/recipes/annual-daylight)
+- [Daylight factor recipe](https://github.com/pollination/ladybug-tools-recipes/tree/master/recipes/daylight-factor)
+
