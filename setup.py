@@ -11,7 +11,7 @@ setuptools.setup(
     cmdclass={'develop': PackageQBDevelop, 'install': PackageQBInstall},    # this is critical for local packaging
     name='pollination-honeybee-radiance',                                   # will be used for package name unless it is overwritten using __queenbee__ info.
     setup_requires=['setuptools_scm'],
-    version='0.4.0',                                                        # will be used as package tag
+    version='0.4.1',                                                        # will be used as package tag
     url='https://github.com/pollination/pollination-honeybee-radiance',     # will be translated to home
     project_urls={
         'icon': 'https://raw.githubusercontent.com/ladybug-tools/artwork/master/icons_bugs/grasshopper_tabs/HB-Radiance.png',
