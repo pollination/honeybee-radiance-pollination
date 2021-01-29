@@ -17,6 +17,6 @@ class CreateRadianceFolder(Function):
 
     model_folder = Outputs.folder(description='Radiance folder.', path='model')
 
-    sensor_grids = Outputs.dict(
+    sensor_grids = Outputs.list(
         description='Sensor grids information.', path='model/grid/_info.json'
     )

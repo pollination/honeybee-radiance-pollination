@@ -18,7 +18,7 @@ class SplitGrid(Function):
         return 'honeybee-radiance grid split grid.pts ' \
             '{{self.sensor_count}} --folder output --log-file output/grids_info.json'
 
-    grids_list = Outputs.dict(
+    grids_list = Outputs.list(
         description='A JSON array that includes information about generated sensor '
         'grids.', path='output/grids_info.json'
     )
