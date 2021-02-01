@@ -9,9 +9,10 @@ with open("README.md", "r") as fh:
 # normal setuptool inputs
 setuptools.setup(
     cmdclass={'develop': PackageQBDevelop, 'install': PackageQBInstall},    # this is critical for local packaging
-    name='pollination-honeybee-radiance',                                   # will be used for package name unless it is overwritten using __queenbee__ info.
+    name='pollination-honeybee-radiance',                                           # will be used for package name unless it is overwritten using __queenbee__ info.
+    packages=setuptools.find_namespace_packages(include=['pollination.*']),  # required - that's how pollination find the package
+    use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    version='0.4.1',                                                        # will be used as package tag
     url='https://github.com/pollination/pollination-honeybee-radiance',     # will be translated to home
     project_urls={
         'icon': 'https://raw.githubusercontent.com/ladybug-tools/artwork/master/icons_bugs/grasshopper_tabs/HB-Radiance.png',
@@ -24,7 +25,7 @@ setuptools.setup(
     author_email='mostapha@ladybug.tools',                                  # translated to maintainers. For multiple authors use comma
     maintainer='ladybug-tools',                                             # inside the string.
     maintainer_email='info@ladybug.tools',
-    packages=setuptools.find_packages('pollination_honeybee_radiance'),
-    keywords='honeybee, radiance, ladybug-tools, daylight',                 # will be used as keywords
-    license='PolyForm Shield License 1.0.0, https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt'  # the license link should be separated by a comma
+    keywords='honeybee, radiance, ladybug-tools, daylight',                  # will be used as keywords
+    license='PolyForm Shield License 1.0.0, https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt',  # the license link should be separated by a comma
+    zip_safe=False
 )
