@@ -6,12 +6,19 @@ from pollination_dsl.package import PostInstall, PostDevelop
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
 # normal setuptool inputs
 setuptools.setup(
     cmdclass={'develop': PostDevelop, 'install': PostInstall},              # this is critical for local packaging
     name='pollination-honeybee-radiance',                                   # will be used for package name unless it is overwritten using __queenbee__ info.
     author='ladybug-tools',                                                 # the owner account for this package - required if pushed to Pollination
-    packages=setuptools.find_namespace_packages(include=['pollination.*']),  # required - that's how pollination find the package
+    # required - that's how pollination find the package
+    packages=setuptools.find_namespace_packages(
+        include=['pollination.*'], exclude=['tests/*']
+    ),
+    install_requires=requirements,
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     url='https://github.com/pollination/pollination-honeybee-radiance',     # will be translated to home
