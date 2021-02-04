@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 import setuptools
 # add these line to integrate the queenbee packaging process into Python packaging
-from pollination_dsl.package import PostInstall, PostDevelop
+try:
+    from pollination_dsl.package import PostInstall, PostDevelop
+except ModuleNotFoundError as error:
+    if 'No module named' in error and 'pollination_dsl' in error:
+        # this is the case for the first time install pollination_dsl hasn't been
+        # installed yet
+        pass
+    raise ModuleNotFoundError(error)
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
