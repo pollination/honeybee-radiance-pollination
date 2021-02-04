@@ -13,7 +13,7 @@ release of Radiance from
 # Functions
 
 You can see the list of available functions in honeybee-radiance plugin
-[here](https://app.pollination.cloud/plugins/ladybug-tools/honeybee-radiance/0.4.0).
+[here](https://app.pollination.cloud/plugins/ladybug-tools/honeybee-radiance).
 
 # Example
 
