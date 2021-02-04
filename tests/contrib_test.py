@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.contrib import DaylightContribution
+from pollination.honeybee_radiance.contrib import DaylightContribution
 from queenbee.plugin.function import Function
 
 

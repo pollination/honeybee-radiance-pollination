@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.octree import CreateOctree, CreateOctreeWithSky
+from pollination.honeybee_radiance.octree import CreateOctree, CreateOctreeWithSky
 from queenbee.plugin.function import Function
 
 

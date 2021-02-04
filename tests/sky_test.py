@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.sky import \
+from pollination.honeybee_radiance.sky import \
     AddRemoveSkyMatrix, AddRemoveSkyMatrixWithConversion, GenSkyWithCertainIllum, \
     CreateSkyDome, CreateSkyMatrix
 

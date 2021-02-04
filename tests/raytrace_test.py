@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.raytrace import RayTracingDaylightFactor
+from pollination.honeybee_radiance.raytrace import RayTracingDaylightFactor
 from queenbee.plugin.function import Function
 
 

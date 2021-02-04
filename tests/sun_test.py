@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.sun import CreateSunMatrix, ParseSunUpHours
+from pollination.honeybee_radiance.sun import CreateSunMatrix, ParseSunUpHours
 
 from queenbee.plugin.function import Function
 

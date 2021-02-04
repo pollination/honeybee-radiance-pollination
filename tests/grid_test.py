@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.grid import SplitGrid, SplitGridFromFolder, \
+from pollination.honeybee_radiance.grid import SplitGrid, SplitGridFromFolder, \
     MergeFiles
 from queenbee.plugin.function import Function
 

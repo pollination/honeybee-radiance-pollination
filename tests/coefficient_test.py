@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.coefficient import DaylightCoefficient
+from pollination.honeybee_radiance.coefficient import DaylightCoefficient
 from queenbee.plugin.function import Function
 
 
