@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.matrix import MatrixMultiplication
+from pollination.honeybee_radiance.matrix import MatrixMultiplication
 from queenbee.plugin.function import Function
 
 

@@ -1,4 +1,4 @@
-from pollination_honeybee_radiance.translate import CreateRadianceFolder
+from pollination.honeybee_radiance.translate import CreateRadianceFolder
 
 from queenbee.plugin.function import Function
 
