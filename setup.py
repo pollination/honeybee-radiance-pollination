@@ -22,9 +22,9 @@ setuptools.setup(
     cmdclass={'develop': PostDevelop, 'install': PostInstall},              # this is critical for local packaging
     name='pollination-honeybee-radiance',                                   # will be used for package name unless it is overwritten using __queenbee__ info.
     author='ladybug-tools',                                                 # the owner account for this package - required if pushed to Pollination
-    # required - that's how pollination find the package
-    packages=setuptools.find_namespace_packages(
-        include=['pollination.*'], exclude=['tests/*']
+    author_email='info@ladybug.tools',
+    packages=setuptools.find_namespace_packages(                            # required - that's how pollination find the package
+        include=['pollination.*'], exclude=['tests', '.github']
     ),
     install_requires=requirements,
     use_scm_version=True,
