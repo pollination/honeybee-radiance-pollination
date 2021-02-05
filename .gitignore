@@ -15,3 +15,5 @@ tox.ini
 
 venv
 test.py
+dist/
+build/
