@@ -3,12 +3,10 @@ import setuptools
 # add these line to integrate the queenbee packaging process into Python packaging
 try:
     from pollination_dsl.package import PostInstall, PostDevelop
-except ModuleNotFoundError as error:
-    if 'No module named' in error and 'pollination_dsl' in error:
-        # this is the case for the first time install pollination_dsl hasn't been
-        # installed yet
-        pass
-    raise ModuleNotFoundError(error)
+    cmd_class = {'develop': PostDevelop, 'install': PostInstall}
+except ModuleNotFoundError:
+    # this will happen the very first time when pollination_dsl is not installed
+    cmd_class = {}
 
 
 with open("README.md", "r") as fh:
@@ -19,7 +17,7 @@ with open('requirements.txt') as f:
 
 # normal setuptool inputs
 setuptools.setup(
-    cmdclass={'develop': PostDevelop, 'install': PostInstall},              # this is critical for local packaging
+    cmdclass=cmd_class,                                                     # this is critical for local packaging
     name='pollination-honeybee-radiance',                                   # will be used for package name unless it is overwritten using __queenbee__ info.
     author='ladybug-tools',                                                 # the owner account for this package - required if pushed to Pollination
     author_email='info@ladybug.tools',
