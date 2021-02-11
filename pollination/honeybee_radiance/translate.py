@@ -20,3 +20,7 @@ class CreateRadianceFolder(Function):
     sensor_grids = Outputs.list(
         description='Sensor grids information.', path='model/grid/_info.json'
     )
+
+    sensor_grids_file = Outputs.file(
+        description='Sensor grids information JSON file.', path='model/grid/_info.json'
+    )
