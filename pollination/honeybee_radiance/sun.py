@@ -15,9 +15,15 @@ class CreateSunMatrix(Function):
         description='Path to a wea file.', extensions=['wea'], path='sky.wea'
     )
 
+    output_type = Inputs.int(
+        description='Output type. 0 is for visible and 1 is for solar.', default=0,
+        spec={'type': 'integer', 'maximum': 1, 'minimum': 0}
+    )
+
     @command
     def generate_sun_matrix(self):
-        return 'gendaymtx -n -D sunpath.mtx -M suns.mod -O0 -r {{self.north}} -v sky.wea'
+        return 'gendaymtx -n -D sunpath.mtx -M suns.mod -O{{self.output_type}} ' \
+            '-r {{self.north}} -v sky.wea'
 
     sunpath = Outputs.file(description='Output sunpath matrix.', path='sunpath.mtx')
 
