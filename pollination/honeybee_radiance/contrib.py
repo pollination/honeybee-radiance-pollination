@@ -26,6 +26,18 @@ class DaylightContribution(Function):
         spec={'type': 'string', 'enum': ['value', 'coeff']}
     )
 
+    conversion = Inputs.str(
+        description='Conversion values as a string which will be passed to rmtxop -c.',
+        default=''
+    )
+
+    output_type = Inputs.str(
+        description='Output type for converted results. Valid inputs are a, f and '
+        'd for ASCII, float or double. If conversion is not provided you can change the '
+        'output type using rad-params options.', default='a',
+        spec={'type': 'string', 'enum': ['a', 'd', 'f']}
+    )
+
     sensor_count = Inputs.int(
         description='Number of maximum sensors in each generated grid.',
         spec={'type': 'integer', 'minimum': 1}
@@ -51,6 +63,7 @@ class DaylightContribution(Function):
         return 'honeybee-radiance dc scontrib scene.oct grid.pts suns.mod ' \
             '--{{self.calculate_values}} --sensor-count {{self.sensor_count}} ' \
             '--rad-params "{{self.radiance_parameters}}" --rad-params-locked ' \
-            '"{{self.fixed_radiance_parameters}}" --output results.ill'
+            '"{{self.fixed_radiance_parameters}}" --conversion "{{self.conversion}}" ' \
+            '--output-type {{self.output_type}} --output results.ill'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')

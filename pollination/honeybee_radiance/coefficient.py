@@ -40,11 +40,24 @@ class DaylightCoefficient(Function):
         extensions=['oct']
     )
 
+    conversion = Inputs.str(
+        description='Conversion values as a string which will be passed to rmtxop -c.'
+        'This option is useful to post-process the results from 3 RGB components into '
+        'one as part of this command.', default=''
+    )
+
+    output_type = Inputs.str(
+        description='Output type for converted results. Valid inputs are a, f and '
+        'd for ASCII, float or double.', default='f',
+        spec={'type': 'string', 'enum': ['a', 'd', 'f']}
+    )
+
     @command
     def run_daylight_coeff(self):
         return 'honeybee-radiance dc scoeff scene.oct grid.pts sky.dome sky.mtx ' \
             '--sensor-count {{self.sensor_count}} --output results.ill --rad-params ' \
             '"{{self.radiance_parameters}}" --rad-params-locked '\
-            '"{{self.fixed_radiance_parameters}}"'
+            '"{{self.fixed_radiance_parameters}}" --conversion "{{self.conversion}}" ' \
+            '--output-type {{self.output_type}}'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')

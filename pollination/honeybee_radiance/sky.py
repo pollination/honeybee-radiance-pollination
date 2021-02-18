@@ -48,6 +48,64 @@ class AddRemoveSkyMatrixWithConversion(AddRemoveSkyMatrix):
 
 
 @dataclass
+class AddSkyMatrix(Function):
+    """Add indirect sky to direct sunlight."""
+
+    indirect_sky_matrix = Inputs.file(
+        description='Path to matrix for indirect sky contribution.',
+        path='sky.ill', extensions=['ill', 'dc']
+    )
+
+    sunlight_matrix = Inputs.file(
+        description='Path to matrix for direct sunlight contribution.',
+        path='sun.ill', extensions=['ill', 'dc']
+    )
+
+    output_format = Inputs.str(
+        default='-fa',
+        spec={'type': 'string', 'enum': ['-fa', '-fd']}
+    )
+
+    @command
+    def create_matrix(self):
+        return 'rmtxop {{self.output_format}} sky.ill + sun.ill | getinfo - > final.ill'
+
+    results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
+
+
+@dataclass
+class AddSkyMatrixWithConversion(Function):
+    """Add indirect sky to direct sunlight."""
+
+    indirect_sky_matrix = Inputs.file(
+        description='Path to matrix for indirect sky contribution.',
+        path='sky.ill', extensions=['ill', 'dc']
+    )
+
+    sunlight_matrix = Inputs.file(
+        description='Path to matrix for direct sunlight contribution.',
+        path='sun.ill', extensions=['ill', 'dc']
+    )
+
+    conversion = Inputs.str(
+        description='conversion as a string which will be passed to -c',
+        default='47.4 119.9 11.6'
+    )
+
+    output_format = Inputs.str(
+        default='-fa',
+        spec={'type': 'string', 'enum': ['-fa', '-fd']}
+    )
+
+    @command
+    def create_matrix(self):
+        return 'rmtxop {{self.output_format}} sky.ill + sun.ill ' \
+            '-c {{self.conversion}} | getinfo - > final.ill'
+
+    results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
+
+
+@dataclass
 class GenSkyWithCertainIllum(Function):
     """Generates a sky with certain illuminance level."""
 
@@ -91,12 +149,18 @@ class CreateSkyMatrix(Function):
         default=' ', spec={'type': 'string', 'enum': ['-s', '-d', ' ']}
     )
 
+    output_type = Inputs.int(
+        description='Output type. 0 is for visible and 1 is for solar.', default=0,
+        spec={'type': 'integer', 'maximum': 1, 'minimum': 0}
+    )
+
     wea = Inputs.file(
         description='Path to a wea file.', extensions=['wea'], path='sky.wea'
     )
 
     @command
     def generate_sky_matrix(self):
-        return 'gendaymtx -u -O0 -r {{self.north}} -v {{self.sky_component}} sky.wea > sky.mtx'
+        return 'gendaymtx -u -O{{self.output_type}} -r {{self.north}} ' \
+            '-v {{self.sky_component}} sky.wea > sky.mtx'
 
     sky_matrix = Outputs.file(description='Output Sky matrix', path='sky.mtx')
