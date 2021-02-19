@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pollination_dsl.function import Function, command, Inputs, Outputs
+from pollination_dsl.function import Function, command, Inputs, Outputs, inputs
 
 
 @dataclass
@@ -21,30 +21,31 @@ class AddRemoveSkyMatrix(Function):
         path='sun.ill', extensions=['ill', 'dc']
     )
 
-    @command
-    def create_matrix(self):
-        return 'rmtxop sky.ill + -s -1.0 sky_dir.ill + sun.ill > final.ill'
-
-    results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
-
-
-@dataclass
-class AddRemoveSkyMatrixWithConversion(AddRemoveSkyMatrix):
-    """Remove direct sky from total sky and add direct sun."""
     conversion = Inputs.str(
-        description='conversion as a string which will be passed to -c',
-        default='47.4 119.9 11.6'
+        description='Conversion as a string which will be passed to rmtxop -c option.',
+        default=' '
     )
 
     output_format = Inputs.str(
-        default='-fa',
-        spec={'type': 'string', 'enum': ['-fa', '-fd']}
+        default='a', description='Output file format. a for ASCII, d for double, f for '
+        'float and c for RGBE color.',
+        spec={'type': 'string', 'enum': ['a', 'd', 'f', 'c']}
+    )
+
+    header = Inputs.str(
+        default='remove',
+        description='An input to indicate if header should be kept or removed from the'
+        'output matrix.', spec={'type': 'string', 'enum': ['keep', 'remove']}
     )
 
     @command
     def create_matrix(self):
-        return 'rmtxop {{self.output_format}} sky.ill + -s -1.0 sky_dir.ill + sun.ill ' \
-            '-c {{self.conversion}} | getinfo - > final.ill'
+        return 'honeybee-radiance mtxop operate-three sky.ill sky_dir.ill sun.ill ' \
+            '--operator-one "-" --operator-two "+" --{{self.header}}-header ' \
+            '--conversion "{{self.conversion}}" --output-mtx final.ill ' \
+            '--output-format {{self.output_format}}'
+
+    results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
 
 
 @dataclass
@@ -61,46 +62,28 @@ class AddSkyMatrix(Function):
         path='sun.ill', extensions=['ill', 'dc']
     )
 
-    output_format = Inputs.str(
-        default='-fa',
-        spec={'type': 'string', 'enum': ['-fa', '-fd']}
-    )
-
-    @command
-    def create_matrix(self):
-        return 'rmtxop {{self.output_format}} sky.ill + sun.ill | getinfo - > final.ill'
-
-    results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
-
-
-@dataclass
-class AddSkyMatrixWithConversion(Function):
-    """Add indirect sky to direct sunlight."""
-
-    indirect_sky_matrix = Inputs.file(
-        description='Path to matrix for indirect sky contribution.',
-        path='sky.ill', extensions=['ill', 'dc']
-    )
-
-    sunlight_matrix = Inputs.file(
-        description='Path to matrix for direct sunlight contribution.',
-        path='sun.ill', extensions=['ill', 'dc']
-    )
-
     conversion = Inputs.str(
-        description='conversion as a string which will be passed to -c',
-        default='47.4 119.9 11.6'
+        description='Conversion as a string which will be passed to rmtxop -c option.',
+        default=' '
     )
 
     output_format = Inputs.str(
-        default='-fa',
-        spec={'type': 'string', 'enum': ['-fa', '-fd']}
+        default='a', description='Output file format. a for ASCII, d for double, f for '
+        'float and c for RGBE color.',
+        spec={'type': 'string', 'enum': ['a', 'd', 'f', 'c']}
+    )
+
+    header = Inputs.str(
+        default='remove',
+        description='An input to indicate if header should be kept or removed from the'
+        'output matrix.', spec={'type': 'string', 'enum': ['keep', 'remove']}
     )
 
     @command
     def create_matrix(self):
-        return 'rmtxop {{self.output_format}} sky.ill + sun.ill ' \
-            '-c {{self.conversion}} | getinfo - > final.ill'
+        return 'honeybee-radiance mtxop operate-two sky.ill sun.ill ' \
+            '--operator + --{{self.header}}-header --conversion "{{self.conversion}}" ' \
+            '--output-mtx final.ill --output-format {{self.output_format}}'
 
     results_file = Outputs.file(description='Radiance matrix file.', path='final.ill')
 
@@ -143,24 +126,42 @@ class CreateSkyMatrix(Function):
         default=0, spec={'type': 'integer', 'maximum': 360, 'minimum': 0}
     )
 
-    sky_component = Inputs.str(
-        description='A switch for generating sun-only using -d or exclude sun '
-        'contribution using -s. The default is an empty string for including both.',
-        default=' ', spec={'type': 'string', 'enum': ['-s', '-d', ' ']}
+    sky_type = Inputs.str(
+        description='A switch for generating sun-only sky or exclude sun '
+        'contribution. The default is total sky which includes both.',
+        default='total', spec={'type': 'string', 'enum': ['total', 'sun-only', 'no-sun']}
     )
 
-    output_type = Inputs.int(
-        description='Output type. 0 is for visible and 1 is for solar.', default=0,
-        spec={'type': 'integer', 'maximum': 1, 'minimum': 0}
+    cumulative = Inputs.str(
+        description='An option to generate a cumulative sky instead of an hourly sky',
+        default='hourly', spec={'type': 'string', 'enum': ['hourly', 'cumulative']}
     )
 
+    output_type = Inputs.str(
+        description='Output type which can be visible and or solar.', default='visible',
+        spec={'type': 'string', 'enum': ['visible', 'solar']}
+    )
+
+    output_format = Inputs.str(
+        description='Output file format. Options are float, double and ASCII.',
+        default='ASCII', spec={'type': 'string', 'enum': ['float', 'double', 'ASCII']}
+    )
+
+    sun_up_hours = Inputs.str(
+        description='An option to generate the sky for sun-up hours only. Default is '
+        'for all the hours of the year.',
+        default='all-hours',
+        spec={'type': 'string', 'enum': ['all-hours', 'sun-up-hours']}
+    )
     wea = Inputs.file(
         description='Path to a wea file.', extensions=['wea'], path='sky.wea'
     )
 
     @command
     def generate_sky_matrix(self):
-        return 'gendaymtx -u -O{{self.output_type}} -r {{self.north}} ' \
-            '-v {{self.sky_component}} sky.wea > sky.mtx'
+        return 'honeybee-radiance sky mtx sky.wea --name sky --north {{self.north}} ' \
+            '--sky-type {{self.sky_type}} --{{self.cumulative}} ' \
+            '--{{self.sun_up_hours}} --{{self.output_type}} ' \
+            '--output-format {{self.output_format}}'
 
     sky_matrix = Outputs.file(description='Output Sky matrix', path='sky.mtx')

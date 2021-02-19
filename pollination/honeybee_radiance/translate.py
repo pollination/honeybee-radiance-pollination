@@ -11,9 +11,15 @@ class CreateRadianceFolder(Function):
         path='model.hbjson'
     )
 
+    sensor_grid = Inputs.str(
+        description='A pattern to filter grids to be exported to radiance folder. By '
+        'default all the grids will be exported.', default='*'
+    )
+
     @command
     def hbjson_to_rad_folder(self):
-        return 'honeybee-radiance translate model-to-rad-folder model.hbjson'
+        return 'honeybee-radiance translate model-to-rad-folder model.hbjson ' \
+            '--grid "{{self.sensor_grid}}"'
 
     model_folder = Outputs.folder(description='Radiance folder.', path='model')
 
