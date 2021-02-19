@@ -13,12 +13,13 @@ release of Radiance from
 # Functions
 
 You can see the list of available functions in honeybee-radiance plugin
-[here](https://app.pollination.cloud/plugins/ladybug-tools/honeybee-radiance).
+[here](https://app.pollination.cloud/plugins/ladybug-tools/honeybee-radiance)
+on Pollination.
 
 # Example
 
 For a real-world example see Ladybug Tools recipes:
 
-- [Annual daylight recipe](https://github.com/pollination/ladybug-tools-recipes/tree/master/recipes/annual-daylight)
-- [Daylight factor recipe](https://github.com/pollination/ladybug-tools-recipes/tree/master/recipes/daylight-factor)
+- [Annual daylight recipe](https://github.com/pollination/annual-daylight=)
+- [Daylight factor recipe](https://github.com/pollination/daylight-factor)
 
