@@ -46,8 +46,8 @@ class DaylightCoefficient(Function):
         'one as part of this command.', default=''
     )
 
-    output_type = Inputs.str(
-        description='Output type for converted results. Valid inputs are a, f and '
+    output_format = Inputs.str(
+        description='Output format for converted results. Valid inputs are a, f and '
         'd for ASCII, float or double.', default='f',
         spec={'type': 'string', 'enum': ['a', 'd', 'f']}
     )
@@ -58,6 +58,6 @@ class DaylightCoefficient(Function):
             '--sensor-count {{self.sensor_count}} --output results.ill --rad-params ' \
             '"{{self.radiance_parameters}}" --rad-params-locked '\
             '"{{self.fixed_radiance_parameters}}" --conversion "{{self.conversion}}" ' \
-            '--output-type {{self.output_type}}'
+            '--output-format {{self.output_format}}'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')

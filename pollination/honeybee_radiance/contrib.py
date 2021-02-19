@@ -31,10 +31,10 @@ class DaylightContribution(Function):
         default=''
     )
 
-    output_type = Inputs.str(
-        description='Output type for converted results. Valid inputs are a, f and '
+    output_format = Inputs.str(
+        description='Output format for converted results. Valid inputs are a, f and '
         'd for ASCII, float or double. If conversion is not provided you can change the '
-        'output type using rad-params options.', default='a',
+        'output format using rad-params options.', default='a',
         spec={'type': 'string', 'enum': ['a', 'd', 'f']}
     )
 
@@ -64,6 +64,6 @@ class DaylightContribution(Function):
             '--{{self.calculate_values}} --sensor-count {{self.sensor_count}} ' \
             '--rad-params "{{self.radiance_parameters}}" --rad-params-locked ' \
             '"{{self.fixed_radiance_parameters}}" --conversion "{{self.conversion}}" ' \
-            '--output-type {{self.output_type}} --output results.ill'
+            '--output-format {{self.output_format}} --output results.ill'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')
