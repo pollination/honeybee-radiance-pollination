@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pollination_dsl.function import Function, command, Inputs, Outputs, inputs
+from pollination_dsl.function import Function, command, Inputs, Outputs
 
 
 @dataclass
@@ -132,6 +132,15 @@ class CreateSkyMatrix(Function):
         default='total', spec={'type': 'string', 'enum': ['total', 'sun-only', 'no-sun']}
     )
 
+    sky_density = Inputs.int(
+        description='The density of generated sky. This input corresponds to gendaymtx '
+        '-m option. -m 1 generates 146 patch starting with 0 for the ground and '
+        'continuing to 145 for the zenith. Increasing the -m parameter yields a higher '
+        'resolution sky using the Reinhart patch subdivision. For example, setting -m 4 '
+        'yields a sky with 2305 patches plus one patch for the ground.', default=1,
+        spec={'type': 'integer', 'minimum': 1}
+    )
+
     cumulative = Inputs.str(
         description='An option to generate a cumulative sky instead of an hourly sky',
         default='hourly', spec={'type': 'string', 'enum': ['hourly', 'cumulative']}
@@ -153,6 +162,7 @@ class CreateSkyMatrix(Function):
         default='all-hours',
         spec={'type': 'string', 'enum': ['all-hours', 'sun-up-hours']}
     )
+
     wea = Inputs.file(
         description='Path to a wea file.', extensions=['wea'], path='sky.wea'
     )
@@ -162,6 +172,6 @@ class CreateSkyMatrix(Function):
         return 'honeybee-radiance sky mtx sky.wea --name sky --north {{self.north}} ' \
             '--sky-type {{self.sky_type}} --{{self.cumulative}} ' \
             '--{{self.sun_up_hours}} --{{self.output_type}} ' \
-            '--output-format {{self.output_format}}'
+            '--output-format {{self.output_format}} --sky-density {{self.sky_density}}'
 
     sky_matrix = Outputs.file(description='Output Sky matrix', path='sky.mtx')
