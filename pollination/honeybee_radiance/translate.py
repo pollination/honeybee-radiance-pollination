@@ -30,3 +30,31 @@ class CreateRadianceFolder(Function):
     sensor_grids_file = Outputs.file(
         description='Sensor grids information JSON file.', path='model/grid/_info.json'
     )
+
+
+@dataclass
+class CreateRadiantEnclosureInfo(Function):
+    """Create JSONs with radiant enclosure information from a HBJSON input file.
+
+    This enclosure info is intended to be consumed by thermal mapping functions.
+    """
+
+    input_model = Inputs.file(
+        description='Path to input HBJSON file.',
+        path='model.hbjson'
+    )
+
+    @command
+    def hbjson_to_radiant_enclosure_info(self):
+        return 'honeybee-radiance translate model-radiant-enclosure-info model.hbjson ' \
+            '--folder output --log-file enclosure_list.json'
+
+    enclosure_list = Outputs.dict(
+        description='A JSON array that includes information about generated radiant '
+        'enclosure files.', path='output/enclosure_list.json'
+    )
+
+    output_folder = Outputs.folder(
+        description='Output folder with the enclosure info JSONs for each grid.',
+        path='output'
+    )
