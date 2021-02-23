@@ -19,7 +19,7 @@ class MirrorModelSensorGrids(Function):
     )
 
     @command
-    def geometry_2004(self):
+    def mirror_sensor_grids(self):
         return 'honeybee-radiance edit mirror-model-sensors model.hbjson ' \
             '--output-file new_model.hbjson'
 

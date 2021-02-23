@@ -39,7 +39,7 @@ class CreateRadiantEnclosureInfo(Function):
     This enclosure info is intended to be consumed by thermal mapping functions.
     """
 
-    input_model = Inputs.file(
+    model = Inputs.file(
         description='Path to input HBJSON file.',
         path='model.hbjson'
     )
@@ -51,7 +51,7 @@ class CreateRadiantEnclosureInfo(Function):
 
     enclosure_list = Outputs.dict(
         description='A JSON array that includes information about generated radiant '
-        'enclosure files.', path='output/enclosure_list.json'
+        'enclosure files.', path='enclosure_list.json'
     )
 
     output_folder = Outputs.folder(
