@@ -50,7 +50,12 @@ class CreateRadiantEnclosureInfo(Function):
             '--folder output --log-file enclosure_list.json'
 
     enclosure_list = Outputs.dict(
-        description='A JSON array that includes information about generated radiant '
+        description='A list of dictionaries that include information about generated '
+        'radiant enclosure files.', path='enclosure_list.json'
+    )
+
+    enclosure_list_file = Outputs.file(
+        description='A JSON file that includes information about generated radiant '
         'enclosure files.', path='enclosure_list.json'
     )
 
