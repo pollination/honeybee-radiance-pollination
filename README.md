@@ -20,6 +20,6 @@ on Pollination.
 
 For a real-world example see Ladybug Tools recipes:
 
-- [Annual daylight recipe](https://github.com/pollination/annual-daylight=)
+- [Annual daylight recipe](https://github.com/pollination/annual-daylight)
 - [Daylight factor recipe](https://github.com/pollination/daylight-factor)
 
