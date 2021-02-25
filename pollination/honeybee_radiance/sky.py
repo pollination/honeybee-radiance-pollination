@@ -108,9 +108,19 @@ class GenSkyWithCertainIllum(Function):
 class CreateSkyDome(Function):
     """Create a skydome for daylight coefficient studies."""
 
+    sky_density = Inputs.int(
+        description='The density of generated sky. This input corresponds to gendaymtx '
+        '-m option. -m 1 generates 146 patch starting with 0 for the ground and '
+        'continuing to 145 for the zenith. Increasing the -m parameter yields a higher '
+        'resolution sky using the Reinhart patch subdivision. For example, setting -m 4 '
+        'yields a sky with 2305 patches plus one patch for the ground.', default=1,
+        spec={'type': 'integer', 'minimum': 1}
+    )
+
     @command
     def gen_sky_dome(self):
-        return 'honeybee-radiance sky skydome --name rflux_sky.sky'
+        return 'honeybee-radiance sky skydome --name rflux_sky.sky ' \
+            '--sky-density {{self.sky_density}}'
 
     sky_dome = Outputs.file(
         description='A sky hemisphere with ground.', path='rflux_sky.sky'
