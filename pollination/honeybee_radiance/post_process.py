@@ -12,14 +12,97 @@ class ConvertToBinary(Function):
         path='input.mtx'
     )
 
+    minimum = Inputs.float(
+        description='Minimum range for the values that will be converted to 1.',
+        default=-1 * 10**100
+    )
+
+    maximum = Inputs.float(
+        description='Maximum range for the values that will be converted to 1.',
+        default=10**100
+    )
+
+    include_min = Inputs.str(
+        description='A flag to include the minimum threshold itself. By default the '
+        'threshold value will be included.', default='include',
+        spec={'type': 'string', 'enum': ['include', 'exclude']}
+    )
+
+    include_max = Inputs.str(
+        description='A flag to include the maximum threshold itself. By default the '
+        'threshold value will be included.', default='include',
+        spec={'type': 'string', 'enum': ['include', 'exclude']}
+    )
+
+    reverse = Inputs.str(
+        description='A flag to reverse the selection logic. This is useful for cases '
+        'that you want to all the values outside a certain range to be converted to 1. '
+        'By default the input logic will be used as is.', default='comply',
+        spec={'type': 'string', 'enum': ['comply', 'reverse']}
+    )
+
     @command
     def convert_to_zero_one(self):
         return 'honeybee-radiance post-process convert-to-binary input.mtx ' \
-            '--output binary.mtx'
+            '--output binary.mtx --maximum {{self.maximum}} ' \
+            '--minimum {{self.minimum}} --{{self.reverse}} ' \
+            '--{{self.include_min}}-min --{{self.include_max}}-max'
 
     # outputs
     output_mtx = Outputs.file(
         description='Newly created binary matrix.', path='binary.mtx'
+    )
+
+
+@dataclass
+class Count(Function):
+    """Count values in a row that meet a certain criteria."""
+
+    # inputs
+    input_mtx = Inputs.file(
+        description='Input Radiance matrix in ASCII format',
+        path='input.mtx'
+    )
+
+    minimum = Inputs.float(
+        description='Minimum range for the values that should be counted.',
+        default=-1 * 10**100
+    )
+
+    maximum = Inputs.float(
+        description='Maximum range for the values that should be counted.',
+        default=10**100
+    )
+
+    include_min = Inputs.str(
+        description='A flag to include the minimum threshold itself. By default the '
+        'threshold value will be included.', default='include',
+        spec={'type': 'string', 'enum': ['include', 'exclude']}
+    )
+
+    include_max = Inputs.str(
+        description='A flag to include the maximum threshold itself. By default the '
+        'threshold value will be included.', default='include',
+        spec={'type': 'string', 'enum': ['include', 'exclude']}
+    )
+
+    reverse = Inputs.str(
+        description='A flag to reverse the selection logic. This is useful for cases '
+        'that you want to all the values outside a certain range. By default the input '
+        'logic will be used as is.', default='comply',
+        spec={'type': 'string', 'enum': ['comply', 'reverse']}
+    )
+
+    @command
+    def count_values(self):
+        return 'honeybee-radiance post-process count input.mtx ' \
+            '--output counter.mtx --maximum {{self.maximum}} ' \
+            '--minimum {{self.minimum}} --{{self.reverse}} ' \
+            '--{{self.include_min}}-min --{{self.include_max}}-max'
+
+    # outputs
+    output_mtx = Outputs.file(
+        description='Newly created binary matrix.', path='counter.mtx'
     )
 
 
@@ -44,6 +127,27 @@ class SumRow(Function):
 
     # outputs
     output_mtx = Outputs.file(description='Newly created sum matrix.', path='sum.mtx')
+
+
+@dataclass
+class AverageRow(Function):
+    """Postprocess a Radiance matrix and average all the numbers in each row."""
+
+    # inputs
+    input_mtx = Inputs.file(
+        description='Input Radiance matrix in ASCII format',
+        path='input.mtx'
+    )
+
+    @command
+    def average_mtx_row(self):
+        return 'honeybee-radiance post-process average-row input.mtx ' \
+            '--output average.mtx'
+
+    # outputs
+    output_mtx = Outputs.file(
+        description='Newly created average matrix.', path='average.mtx'
+    )
 
 
 @dataclass
