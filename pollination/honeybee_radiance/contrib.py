@@ -31,6 +31,13 @@ class DaylightContribution(Function):
         default=''
     )
 
+    order_by = Inputs.str(
+        description='An option to change how results are grouped in each row. By '
+        'default each row are the results for each sensor during all the datetimes. '
+        'Valid options are sensor and datetime.',
+        default='sensor', spec={'type': 'string', 'enum': ['sensor', 'datetime']}
+    )
+
     output_format = Inputs.str(
         description='Output format for converted results. Valid inputs are a, f and '
         'd for ASCII, float or double. If conversion is not provided you can change the '
@@ -64,6 +71,7 @@ class DaylightContribution(Function):
             '--{{self.calculate_values}} --sensor-count {{self.sensor_count}} ' \
             '--rad-params "{{self.radiance_parameters}}" --rad-params-locked ' \
             '"{{self.fixed_radiance_parameters}}" --conversion "{{self.conversion}}" ' \
-            '--output-format {{self.output_format}} --output results.ill'
+            '--output-format {{self.output_format}} --output results.ill ' \
+            '--order-by-{{self.order_by}}'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')

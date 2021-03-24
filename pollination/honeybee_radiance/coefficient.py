@@ -46,6 +46,13 @@ class DaylightCoefficient(Function):
         'one as part of this command.', default=''
     )
 
+    order_by = Inputs.str(
+        description='An option to change how results are ordered in each row. By '
+        'default each row are the results for each sensor during all the datetime. '
+        'Valid options are sensor and datetime.',
+        default='sensor', spec={'type': 'string', 'enum': ['sensor', 'datetime']}
+    )
+
     output_format = Inputs.str(
         description='Output format for converted results. Valid inputs are a, f and '
         'd for ASCII, float or double.', default='f',
@@ -58,6 +65,6 @@ class DaylightCoefficient(Function):
             '--sensor-count {{self.sensor_count}} --output results.ill --rad-params ' \
             '"{{self.radiance_parameters}}" --rad-params-locked '\
             '"{{self.fixed_radiance_parameters}}" --conversion "{{self.conversion}}" ' \
-            '--output-format {{self.output_format}}'
+            '--output-format {{self.output_format}} --order-by-{{self.order_by}}'
 
     result_file = Outputs.file(description='Output result file.', path='results.ill')
