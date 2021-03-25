@@ -3,7 +3,7 @@ from pollination_dsl.function import Function, command, Inputs, Outputs
 
 
 @dataclass
-class CreateRadianceFolder(Function):
+class CreateRadianceFolderGrid(Function):
     """Create a Radiance folder from a HBJSON input file."""
 
     input_model = Inputs.file(
@@ -11,15 +11,18 @@ class CreateRadianceFolder(Function):
         path='model.hbjson'
     )
 
-    sensor_grid = Inputs.str(
-        description='A pattern to filter grids to be exported to radiance folder. By '
-        'default all the grids will be exported.', default='*'
+    grid_filter = Inputs.str(
+        description='Text for a grid identifer or a pattern to filter the sensor grids '
+        'of the model that are simulated. For instance, first_floor_* will simulate '
+        'only the sensor grids that have an identifier that starts with '
+        'first_floor_. By default, all grids in the model will be simulated.',
+        default='*'
     )
 
     @command
     def hbjson_to_rad_folder(self):
         return 'honeybee-radiance translate model-to-rad-folder model.hbjson ' \
-            '--grid "{{self.sensor_grid}}"'
+            '--grid "{{self.grid_filter}}" --grid-check'
 
     model_folder = Outputs.folder(description='Radiance folder.', path='model')
 
@@ -29,6 +32,38 @@ class CreateRadianceFolder(Function):
 
     sensor_grids_file = Outputs.file(
         description='Sensor grids information JSON file.', path='model/grid/_info.json'
+    )
+
+
+@dataclass
+class CreateRadianceFolderView(Function):
+    """Create a Radiance folder from a HBJSON input file."""
+
+    input_model = Inputs.file(
+        description='Path to input HBJSON file.',
+        path='model.hbjson'
+    )
+
+    view_filter = Inputs.str(
+        description='Text for a view identifer or a pattern to filter the views '
+        'of the model that are simulated. For instance, first_floor_* will simulate '
+        'only the views that have an identifier that starts with first_floor_. By '
+        'default, all views in the model will be simulated.', default='*'
+    )
+
+    @command
+    def hbjson_to_rad_folder(self):
+        return 'honeybee-radiance translate model-to-rad-folder model.hbjson ' \
+            '--view "{{self.view_filter}}" --view-check'
+
+    model_folder = Outputs.folder(description='Radiance folder.', path='model')
+
+    views = Outputs.list(
+        description='Views information.', path='model/view/_info.json'
+    )
+
+    views_file = Outputs.file(
+        description='Views information JSON file.', path='model/view/_info.json'
     )
 
 
