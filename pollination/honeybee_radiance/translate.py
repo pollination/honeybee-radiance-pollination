@@ -3,6 +3,42 @@ from pollination_dsl.function import Function, command, Inputs, Outputs
 
 
 @dataclass
+class CreateRadianceFolder(Function):
+    """Create a Radiance folder from a HBJSON input file.
+
+    This function creates the folder but doesn't expose information for sensor grids
+    and views.
+    """
+
+    input_model = Inputs.file(
+        description='Path to input HBJSON file.',
+        path='model.hbjson'
+    )
+
+    grid_filter = Inputs.str(
+        description='Text for a grid identifer or a pattern to filter the sensor grids '
+        'of the model that are simulated. For instance, first_floor_* will simulate '
+        'only the sensor grids that have an identifier that starts with '
+        'first_floor_. By default, all grids in the model will be simulated.',
+        default='*'
+    )
+
+    view_filter = Inputs.str(
+        description='Text for a view identifer or a pattern to filter the views '
+        'of the model that are simulated. For instance, first_floor_* will simulate '
+        'only the views that have an identifier that starts with first_floor_. By '
+        'default, all views in the model will be simulated.', default='*'
+    )
+
+    @command
+    def hbjson_to_rad_folder(self):
+        return 'honeybee-radiance translate model-to-rad-folder model.hbjson ' \
+            '--grid "{{self.grid_filter}}" --view "{{self.view_filter}}"'
+
+    model_folder = Outputs.folder(description='Radiance folder.', path='model')
+
+
+@dataclass
 class CreateRadianceFolderGrid(Function):
     """Create a Radiance folder from a HBJSON input file."""
 
