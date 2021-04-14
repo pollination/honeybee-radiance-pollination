@@ -63,11 +63,23 @@ class CreateRadianceFolderGrid(Function):
     model_folder = Outputs.folder(description='Radiance folder.', path='model')
 
     sensor_grids = Outputs.list(
-        description='Sensor grids information.', path='model/grid/_info.json'
+        description='Information for exported sensor grids in grids subfolder.',
+        path='model/grid/_info.json'
     )
 
     sensor_grids_file = Outputs.file(
-        description='Sensor grids information JSON file.', path='model/grid/_info.json'
+        description='Information JSON file for exported sensor grids in grids '
+        'subfolder.', path='model/grid/_info.json'
+    )
+
+    model_sensor_grids = Outputs.list(
+        description='Sensor grids information from the HB model.',
+        path='model/grid/_model_grids_info.json'
+    )
+
+    model_sensor_grids_file = Outputs.file(
+        description='Sensor grids information from the HB model JSON file.',
+        path='model/grid/_model_grids_info.json'
     )
 
 
